@@ -55,7 +55,7 @@ void Game::createRooms(){
 
 	crashsite->setExits(northstreet, school, generalstore, NULL);
 	generalstore->setExits(NULL,NULL,NULL,NULL);
-	school->setExits(NULL, crashsite, NULL, schoolHallway);
+	school->setExits(NULL, schoolHallway, NULL, crashsite);
 	northstreet->setExits(NULL, NULL, crashsite, NULL);
 
 
@@ -129,21 +129,21 @@ ostream& operator<<(ostream& os, const Game& game);
 
 int main(){
 	typedef Inventory<Character*> Cinventory;
-	Weapon sword("sword", "a long elven sword from the Goblin wars");
-	Character monster("Grue", "a monster that looks like Azog");
+	Weapon M4("M4 Carbine", "Standard issue assault rifle");
+	Character Zombie("Zombie", "a flesh-eating monster");
 	Character hero("Thor", "legendary lightning hero from Asgard");
 
 	Cinventory cinv;
 
-	cout << sword << endl;
-	cout << monster << endl;
+	cout << M4 << endl;
+	cout << Zombie << endl;
 	cout << hero << endl;
 
-	hero.use(sword, monster);
-	hero.use(sword, monster);
-	hero.use(sword, monster);
+	hero.use(M4, Zombie);
+	hero.use(M4, Zombie);
+	hero.use(M4, Zombie);
 
-	cout << monster << endl;
+	cout << Zombie << endl;
 
 	Game* game = Game::getInstance();
 	game->play();
