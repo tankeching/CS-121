@@ -1,8 +1,5 @@
 #include "Door.h"
-#include "Room.h"
-#include "Character.h"
-#include "Key.h"
-#include "GameObject.h"
+
 
 Door::Door(string const& name, string const& desc) : GameObject(name, desc){
 
