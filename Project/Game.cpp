@@ -35,7 +35,7 @@ void Game::play() {
 
 void Game::createRooms(){
 	Room *crashsite, *generalstore, *school, *northstreet, *schoolHallway;
-\
+
 
 	crashsite = new Room("Helicopter crash site", "at the crash site in the middle of a city square");
 	generalstore = new Room("Abandoned general store", "inside an abandoned general store. Looks like it has been scavenged already");
@@ -50,10 +50,13 @@ void Game::createRooms(){
 	_rooms.push_back(generalstore);
 	_rooms.push_back(school);
 	_rooms.push_back(northstreet);
+	_rooms.push_back(schoolHallway);
 
 
 	crashsite->setExits(northstreet, school, generalstore, NULL);
 	generalstore->setExits(NULL,NULL,NULL,NULL);
+	school->setExits(NULL, crashsite, NULL, schoolHallway);
+	northstreet->setExits(NULL, NULL, crashsite, NULL);
 
 
 
