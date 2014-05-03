@@ -46,13 +46,13 @@ void Game::createRooms(){
 	northstreet = new Room("Deserted street", "on North St. It is a deserted street. Looks like the place went to hell");
 	northneighbor = new Room("North St Neighborhood", "in the North St. neighborhood. The houses are dark");
 	policeCar = new Room("Abandoned police car", "The radio is silent. The car radio is non-responsive");
-	openHouse = new Room("Open house", "The  front door is broken down and the power is out.");
-	garage = new Room("House garage", "There is no car. Anything work taking is gone.");
+	openHouse = new Room("Open house", "The  front door is broken down and the power is out");
+	garage = new Room("House garage", "There is no car. Anything work taking is gone");
 	bedroom = new Room("House bedroom", "Picture frames are broken on the ground. Clothing drawers are hanging out.");
-	bathroom = new Room("House bathroom", "The shower was left running.");
-	bedcloset = new Room("Bedroom closet", "There is just clothes and shoes.");
-	kitchen = new Room("House kitchen", "The fridge is open. Pans and pots are all over the room.");
-	schoolmainHallway = new Room("School hallway", "in the hallway. Everything is on the floor, including trails of blood");
+	bathroom = new Room("House bathroom", "The shower was left running");
+	bedcloset = new Room("Bedroom closet", "There is just clothes and shoes");
+	kitchen = new Room("House kitchen", "The fridge is open. Pans and pots are all over the room");
+	schoolmainHallway = new Room("School hallway", "in the hallway. Everything is furniture on the floor");
 	schoolnorthHall = new Room("North school hallway", "in the northern hallway. The lights are flickering");
 	schoolsouthHall = new Room("South school hallway", "in the southern hallway. There are signs of combat");
 	cafeteria = new Room("School cafeteria", "in the school cafeteria");
@@ -117,12 +117,10 @@ void Game::deleteRooms() {
 }
 
 void Game::goRoom(Command command){
-
 	if (!command.hasSecondWord()){
 		cout << "Go where? " << endl;
 		return;
 	}
-
 	string direction = command.getSecondWord();
 	Room* nextRoom = _currentRoom->nextRoom(direction);
 
