@@ -20,7 +20,7 @@ public:
 
 	friend ostream& operator<<(ostream& os, const CommandWords& cmdWords);
 private:
-	string _validCommands[8];
+	string _validCommands[10];
 	int _length;
 	static CommandWords* __instance;
 

@@ -9,7 +9,7 @@ using namespace std;
 
 class Weapon : public Item{
 public:
-	Weapon(string name, string desc, int damagePotl = 10, int defensePotl = 20);
+	Weapon(string name, string desc, int damagePotl = 50, int defensePotl = 20);
 
 	int damagePotl() const;
 	int defensePotl() const;

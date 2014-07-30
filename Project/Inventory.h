@@ -62,12 +62,12 @@ void Inventory<T>::add(T go){
 		cout << "Warning: ignoring attempt to add null item to Inventory." << endl;
 		return;
 	}
-	objects[go->name()] = go;
+	_objects[go->name()] = go;
 }
 
 template <typename T>
 void Inventory<T>::remove(string name){
-	typename unordered_maps<string, t>::iterator it = _objects.find(name);
+	typename unordered_map<string, T>::iterator it = _objects.find(name);
 	if (it != _objects.end()){ _objects.erase(it); }
 }
 
@@ -75,7 +75,8 @@ template <typename T>
 T Inventory<T>::find(string const& name){
 	typename unordered_map<string, T>::const_iterator cit = _objects.find(name);
 	if (cit == _objects.end()){
-		cout << "warning! could find " << name << endl;
+		cout << "warning! could not find " << name << endl;
+		
 	}
 
 	return (cit != _objects.end() ? cit->second : nullptr);
@@ -87,7 +88,7 @@ size_t Inventory<T>::size() const { return _objects.size(); }
 template <typename T>
 string Inventory<T>::objects() const{
 	string objects;
-	for (typename unordered_map<string T>::const_iterator cit = _objects.begin(); cit != _objects.end(); cit++){
+	for (typename unordered_map<string, T>::const_iterator cit = _objects.begin(); cit != _objects.end(); cit++){
 		objects += cit->first + "	";
 	}
 	return objects;

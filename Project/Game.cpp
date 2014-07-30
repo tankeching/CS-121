@@ -5,6 +5,12 @@
 #include "Inventory.h"
 #include "Door.h"
 #include "Room.h"
+#include "NoCloseDoor.h"
+#include "NoLockDoor.h"
+#include "Key.h"
+#include "Location.h"
+#include "Food.h"
+
 
 Game* Game::__instance = NULL;
 
@@ -34,36 +40,38 @@ void Game::play() {
 }
 
 void Game::createRooms(){
-	Room *crashsite, *generalstore, *school, *northstreet, *northneighbor, *policeCar, *openHouse, *garage, *bedroom, *bathroom, *kitchen, *bedcloset,
-		*schoolmainHallway, *schoolnorthHall, 
-		*schoolsouthHall, *cafeteria, *cafeStorage, *alley,
-		*class5, *class8, *principal, *janitorCloset, *playground, *library;
 
+	Weapon* M4 = new Weapon("M4", "standard issue assault rifle");
+	Character* Zombie = new Character("Zombie", "a flesh-eating monster");
+	Key* schoolkey = new Key("schoolkey", "school master key", 2);
+	Key* gatekey = new Key("gatekey", "school gate key", 1);
+	Key* garagekey = new Key("garagekey", "garage key", 3);
+	Key* bathroomkey = new Key("bathroomkey", "bathroom key", 4);
 
-	crashsite = new Room("Helicopter crash site", "at the crash site in the middle of a city square");
-	generalstore = new Room("Abandoned general store", "inside an abandoned general store. It has been scavenged already");
-	school = new Room("Barricaded school", "at the school. It is barricaded enough to look like a fortress");
-	northstreet = new Room("Deserted street", "on North St. It is a deserted street. Looks like the place went to hell");
-	northneighbor = new Room("North St Neighborhood", "in the North St. neighborhood. The houses are dark");
-	policeCar = new Room("Abandoned police car", "The radio is silent. The car radio is non-responsive");
-	openHouse = new Room("Open house", "The  front door is broken down and the power is out");
-	garage = new Room("House garage", "There is no car. Anything work taking is gone");
-	bedroom = new Room("House bedroom", "Picture frames are broken on the ground. Clothing drawers are hanging out.");
-	bathroom = new Room("House bathroom", "The shower was left running");
-	bedcloset = new Room("Bedroom closet", "There is just clothes and shoes");
-	kitchen = new Room("House kitchen", "The fridge is open. Pans and pots are all over the room");
-	schoolmainHallway = new Room("School hallway", "in the hallway. Everything is furniture on the floor");
-	schoolnorthHall = new Room("North school hallway", "in the northern hallway. The lights are flickering");
-	schoolsouthHall = new Room("South school hallway", "in the southern hallway. There are signs of combat");
-	cafeteria = new Room("School cafeteria", "in the school cafeteria");
-	cafeStorage = new Room("Cafeteria storage", "in the storage room. There is are food boxes");
-	class5 = new Room("Classroom 5", "in classroom 5. The desks are out of line. Backpacks are all over the room");
-	class8 = new Room("Classroom 8", "in classroom 6. The lights are on. There are food wrappers on the floor");
-	principal = new Room("Principal's office", "in the Principal's office. There is a keyrack on the wall");
-	janitorCloset = new Room("Janitor's closet", "there is custodial equipment around. There is a toolbox as well");
-	playground = new Room("School playground", "at the school playground. Someone hung themselves on the basketball court");
-	library = new Room("School library", "in the library. Shelves and books are scattered on the floor");
-	alley = new Room("Rundown alleyway", "in the alley way, there is nothing here but trash");
+	Room* crashsite = new Room("Helicopter crash site", "at the crash site in the middle of a city square");
+	Room* generalstore = new Room("Abandoned general store", "inside an abandoned general store. It has been scavenged already");
+	Room* school = new Room("Barricaded school", "at the school. It is barricaded enough to look like a fortress");
+	Room* northstreet = new Room("Deserted street", "on North St. It is a deserted street. Looks like the place went to hell");
+	Room* northneighbor = new Room("North St Neighborhood", "in the North St. neighborhood. The houses are dark");
+	Room* policeCar = new Room("Abandoned police car", "The radio is silent. The car radio is non-responsive");
+	Room* openHouse = new Room("Open house", "The  front door is broken down and the power is out");
+	Room* garage = new Room("House garage", "There is no car. Anything work taking is gone");
+	Room* bedroom = new Room("House bedroom", "Picture frames are broken on the ground. Clothing drawers are hanging out.");
+	Room* bathroom = new Room("House bathroom", "The shower was left running");
+	Room* bedcloset = new Room("Bedroom closet", "There is just clothes and shoes");
+	Room* kitchen = new Room("House kitchen", "The fridge is open. Pans and pots are all over the room");
+	Room* schoolmainHallway = new Room("School hallway", "in the hallway. All the furniture is on the floor");
+	Room* schoolnorthHall = new Room("North school hallway", "in the northern hallway. The lights are flickering");
+	Room* schoolsouthHall = new Room("South school hallway", "in the southern hallway. There are signs of combat");
+	Room* cafeteria = new Room("School cafeteria", "in the school cafeteria");
+	Room* cafeStorage = new Room("Cafeteria storage", "in the storage room. There is are food boxes");
+	Room* class5 = new Room("Classroom 5", "in classroom 5. The desks are out of line. Backpacks are all over the room");
+	Room* class8 = new Room("Classroom 8", "in classroom 6. The lights are on. There are food wrappers on the floor");
+	Room* principal = new Room("Principal's office", "in the Principal's office. There is a ey on the rack on the wall");
+	Room* janitorCloset = new Room("Janitor's closet", "there is custodial equipment around. There is a toolbox as well");
+	Room* playground = new Room("School playground", "at the school playground. Someone hung themselves on the basketball court");
+	Room* library = new Room("School library", "in the library. Shelves and books are scattered on the floor");
+	Room* alley = new Room("Rundown alleyway", "in the alley way, there is nothing here but trash");
 	
 	_rooms.push_back(crashsite);
 	_rooms.push_back(generalstore);
@@ -77,37 +85,71 @@ void Game::createRooms(){
 	_rooms.push_back(schoolsouthHall); _rooms.push_back(janitorCloset); _rooms.push_back(playground); _rooms.push_back(library);
 	_rooms.push_back(cafeteria); _rooms.push_back(cafeStorage);
 	
+	Door* CStoNS = new NoCloseDoor("CStoNS", "door between northstreet and crashsite", crashsite, northstreet);
+	Door* CStoS = new Door("CStoS", "door between crashsite and school", crashsite, school, 1);
+	Door* CStoGS = new NoLockDoor("CstoGS", "door between crashsite and general store", crashsite, generalstore);
+	Door* GStoA = new NoLockDoor("GStoA", "door between generalstore and alley", generalstore, alley);
+	Door* AtoS = new NoCloseDoor("AtoS", "door between alley and school", alley, school);
+	Door* StoMHW = new NoCloseDoor("StoMHW", "door between front of school and main hallway", school, schoolmainHallway);
+	Door* MHWtoC = new NoLockDoor("MHWtoC", "door between main hallway and cafeteria", schoolmainHallway, cafeteria);
+	Door* MHWtoSH = new NoCloseDoor("MHWtoSH", "door between main hallway and south hallway", schoolmainHallway, schoolsouthHall);
+	Door* MHWtoNH = new NoCloseDoor("MHWtoNH", "door between main hallway and north hallway", schoolmainHallway, schoolnorthHall);
+	Door* NHtoPO = new NoLockDoor("NHtoPO", "door between north hallway and principal's office", schoolnorthHall, principal);
+	Door* NHtoC5 = new Door("NHtoC5", "door between north hallway and Room 5", schoolnorthHall, class5, 2);
+	Door* NHtoC8 = new Door("NHtoC8", "door between north hallway and Room 8", schoolnorthHall, class8, 2);
+	Door* SHtoPG = new NoLockDoor("SHtoPG", "door between south hallway and playground", schoolsouthHall, playground);
+	Door* SHtoL = new NoCloseDoor("SHtoL", "door between south hallway and library", schoolsouthHall, library);
+	Door* SHtoJC = new Door("SHtoJC", "door between south hallway and janitor's closet", schoolsouthHall, janitorCloset, 2);
+	Door* CtoSR = new Door("CtoSR", "door between cafeteria and cafeteria storge room", cafeteria, cafeStorage, 2);
+	Door* NStoNN = new NoCloseDoor("NStoNN", "door between north street and north neightborhood", northstreet, northneighbor);
+	Door* NNtoPC1 = new NoLockDoor("NNtoPC", "door between north neighborhood and police car", northneighbor, policeCar);
+	Door* NNtoPC2 = new NoLockDoor("NNtoPC", "door between north neighborhood and police car", northneighbor, policeCar);
+	Door* NNtoOH = new NoCloseDoor("NNtoOH", "door between north neighborhood and open house", northneighbor, openHouse);
+	Door* OHtoBR = new NoLockDoor("OHtoBR", "door between open house and bedroom", openHouse, bedroom);
+	Door* OHtoK = new NoCloseDoor("OHtoK", "door between open house and kitchen", openHouse, kitchen);
+	Door* OHtoG = new Door("OHtoG", "door between open house and garage", openHouse, garage, 3);
+	Door* BRtoB = new Door("BRtoB", "door between bedroom and bathroom", bedroom, bathroom, 4);
+	Door* BRtoBC = new NoLockDoor("BRtoBC", "door between bedroom and bedroom closet", bedroom, bedcloset);
 
+	crashsite->setExits(CStoNS, CStoS, CStoGS, nullptr);	
+	generalstore->setExits(nullptr, GStoA, nullptr, nullptr);
+	alley->setExits(AtoS, nullptr, nullptr, GStoA);
+	school->setExits(nullptr, StoMHW, AtoS, CStoS);
+	schoolmainHallway->setExits(MHWtoNH, MHWtoC, MHWtoSH, StoMHW);
+	schoolnorthHall->setExits(NHtoPO, NHtoC5, MHWtoNH, NHtoC8);
+	schoolsouthHall->setExits(MHWtoSH, SHtoPG, SHtoL, SHtoJC);
+	schoolsouthHall->setExits(MHWtoSH, SHtoPG, SHtoL, SHtoJC);
+	class5->setExits(nullptr, nullptr, nullptr, NHtoC5);
+	class8->setExits(nullptr, NHtoC8, nullptr, nullptr);
+	principal->setExits(nullptr, nullptr, NHtoPO, nullptr);
+	library->setExits(SHtoL, nullptr, nullptr, nullptr);
+	playground->setExits(nullptr, nullptr, nullptr, SHtoPG);
+	janitorCloset->setExits(nullptr, SHtoJC, nullptr, nullptr);
+	cafeteria->setExits(CtoSR, nullptr, nullptr, MHWtoC);
+	cafeStorage->setExits(nullptr, nullptr, CtoSR, nullptr);
+	northstreet->setExits(NStoNN, nullptr, CStoNS, nullptr);
+	northneighbor->setExits(nullptr, NNtoPC1, NStoNN, NNtoOH);
+	policeCar->setExits(nullptr, NNtoPC1, nullptr, NNtoPC2);
+	openHouse->setExits(OHtoBR, OHtoK, OHtoG, NNtoOH);
+	bedroom->setExits(nullptr, BRtoB, OHtoBR, BRtoBC);
+	bathroom->setExits(nullptr, nullptr, nullptr, BRtoB);
+	bedcloset->setExits(nullptr, BRtoBC, nullptr, nullptr);
+	garage->setExits(OHtoG, nullptr, nullptr, nullptr);
+	kitchen->setExits(nullptr, nullptr, nullptr, OHtoK);
 
+	_Player->currentRoom(crashsite);
+	_Player->addItem(M4);
+	crashsite->setCharacters({ _Player, Zombie });
+	crashsite->setItems({ gatekey });
+	bedroom->setItems({ bathroomkey });
+	kitchen->setItems({ garagekey });
+	principal->setItems({ schoolkey });
+	bathroom->setCharacters({ Zombie });
+	northneighbor->setCharacters({ Zombie });
+	library->setCharacters({ Zombie });
+	class8->setCharacters({ Zombie });
+	
 
-	crashsite->setExits(northstreet, school, generalstore, NULL);
-	generalstore->setExits(NULL,alley,NULL,NULL);
-	alley->setExits(school, NULL, NULL, generalstore);
-	school->setExits(NULL, schoolmainHallway, alley, crashsite);
-	schoolmainHallway->setExits(schoolnorthHall, cafeteria, schoolsouthHall, school);
-	schoolnorthHall->setExits(principal, class5, schoolmainHallway, class8);
-	schoolsouthHall->setExits(schoolmainHallway, playground, library, janitorCloset);
-	class5->setExits(NULL, NULL, NULL, schoolnorthHall);
-	class8->setExits(NULL, schoolnorthHall, NULL, NULL);
-	principal->setExits(NULL, NULL, schoolnorthHall, NULL);
-	library->setExits(schoolsouthHall, NULL, NULL, NULL);
-	playground->setExits(NULL, NULL, NULL, schoolsouthHall);
-	janitorCloset->setExits(NULL, schoolsouthHall, NULL, NULL);
-	cafeteria->setExits(cafeStorage, NULL, NULL, schoolmainHallway);
-	cafeStorage->setExits(NULL, NULL, cafeteria, NULL);
-	northstreet->setExits(northneighbor, NULL, crashsite, NULL);
-	northneighbor->setExits(NULL, policeCar, northstreet, openHouse);
-	policeCar->setExits(NULL, northneighbor, NULL, northneighbor);
-	openHouse->setExits(bedroom, kitchen, garage, northneighbor);
-	bedroom->setExits(NULL, bathroom, openHouse, bedcloset);
-	bathroom->setExits(NULL, NULL, NULL, bedroom);
-	bedcloset->setExits(NULL, bedroom, NULL, NULL);
-	garage->setExits(openHouse, NULL, NULL, NULL);
-	kitchen->setExits(NULL, NULL, NULL, openHouse);
-
-
-
-	_currentRoom = crashsite;
 }
 
 void Game::deleteRooms() {
@@ -117,22 +159,153 @@ void Game::deleteRooms() {
 }
 
 void Game::goRoom(Command command){
+	
 	if (!command.hasSecondWord()){
 		cout << "Go where? " << endl;
 		return;
 	}
-	string direction = command.getSecondWord();
-	Room* nextRoom = _currentRoom->nextRoom(direction);
+	string dir = command.getSecondWord();
+	Door* door = _Player->currentRoom()->door(_Player->currentRoom()->direction( dir ));
 
-		if (nextRoom == NULL){
+		if (door == NULL){
 			cout << "There is no door!" << endl;
 		}
 		else{
-			_currentRoom = nextRoom;
-			cout << _currentRoom->longDescription();
+//			Door* thisDoor = _currentRoom->door(_currentRoom->direction( dir ));
+			door->enter(*_Player);
+			cout << _Player->currentRoom()->longDescription() << endl;
+			//cout << _Player->currentRoom()->longDescription();
+			//cout << _Player->currentRoom()->exits();
 		}
 }
 
+void Game::takeItem(Command command){
+	if (!command.hasSecondWord()){
+		cout << "Take what? " << endl;
+		return;
+	}
+
+	string item = command.getSecondWord();
+	_Player->take(item);
+
+}
+
+void Game::openDoor(Command command){
+	if (!command.hasSecondWord()){
+		cout << "Open what? " << endl;
+		return;
+	}
+
+
+	else if (command.hasSecondWord()){
+		string dir = command.getSecondWord();
+		 _Player->currentRoom()->door(_Player->currentRoom()->direction(dir))->open();
+	}
+}
+
+void Game::closeDoor(Command command){
+	if (!command.hasSecondWord()){
+		cout << "Close what? " << endl;
+		return;
+	}
+
+
+	else if (command.hasSecondWord()){
+		string dir = command.getSecondWord();
+		_Player->currentRoom()->door(_Player->currentRoom()->direction(dir))->close();
+	}
+}
+
+void Game::attackMonster(Command command){
+	if (!command.hasSecondWord()){
+		cout << "Attack what? " << endl;
+		return;
+	}
+
+	string monster = command.getSecondWord();
+
+	_Player->use("M4", monster);
+}
+
+void Game::searchRoom(Command command){
+	if (!command.hasSecondWord()){
+		cout << "search what? " << endl;
+		return;
+	}
+
+
+	else if (command.getSecondWord() == "room"){
+		string dir = command.getSecondWord();
+		cout << _Player->currentRoom()->items() << endl;
+		cout << _Player->currentRoom()->characters() << endl;
+	}
+
+	else{
+		cout << "I don't know what you mean." << endl;
+	}
+}
+
+void Game::lockDoor(Command command){
+	if (!command.hasSecondWord()){
+		cout << "Lock what? " << endl;
+		return;
+	}
+	else{
+		string dir = command.getSecondWord();
+		if (_Player->findItem("schoolkey") != NULL){
+			Key* schoolkey = new Key("schoolkey", "school master key", 2);
+			_Player->currentRoom()->door(_Player->currentRoom()->direction(dir))->lockWith(*schoolkey);
+		}
+		if (_Player->findItem("gatekey") != NULL){
+			Key* gatekey = new Key("gatekey", "school gate key", 1);
+			_Player->currentRoom()->door(_Player->currentRoom()->direction(dir))->lockWith(*gatekey);
+		}
+
+		if (_Player->findItem("garagekey") != NULL){
+			Key* garagekey = new Key("garagekey", "garage key", 3);
+			_Player->currentRoom()->door(_Player->currentRoom()->direction(dir))->lockWith(*garagekey);
+		}
+		if (_Player->findItem("bathroomkey") != NULL){
+			Key* bathroomkey = new Key("bathroomkey", "bathroom key", 4);
+			_Player->currentRoom()->door(_Player->currentRoom()->direction(dir))->lockWith(*bathroomkey);
+		}
+		else{
+			cout << "You do not have the right key." << endl;
+		}
+	}
+}
+
+void Game::unlockDoor(Command command){
+	if (!command.hasSecondWord()){
+		cout << "Unlock what? " << endl;
+		return;
+	}
+
+
+	else{
+		string dir = command.getSecondWord();
+		if (_Player->findItem("schoolkey") != NULL){ 
+			Key* schoolkey = new Key("schoolkey", "school master key", 2);
+			_Player->currentRoom()->door(_Player->currentRoom()->direction(dir))->unlockWith(*schoolkey);
+		}
+		else if (_Player->findItem("gatekey") != NULL){ 
+			Key* gatekey = new Key("gatekey", "school gate key", 1);
+			_Player->currentRoom()->door(_Player->currentRoom()->direction(dir))->unlockWith(*gatekey);
+		}
+		
+		else if (_Player->findItem("garagekey") != NULL){ 
+			Key* garagekey = new Key("garagekey", "garage key", 3);
+			_Player->currentRoom()->door(_Player->currentRoom()->direction(dir))->unlockWith(*garagekey);
+		}
+		else if (_Player->findItem("bathroomkey") != NULL){ 
+			Key* bathroomkey = new Key("bathroomkey", "bathroom key", 4);
+			_Player->currentRoom()->door(_Player->currentRoom()->direction(dir))->unlockWith(*bathroomkey);
+		}
+		else{
+			cout << "You do not have the right key." << endl;
+		}
+	}
+}
 
 
 
@@ -149,6 +322,13 @@ bool Game::processCommand(Command command){
 		if (command.hasSecondWord()){ cout << "Quit what?" << endl; }
 		else { return true; }
 	}
+	else if (commandWord == "take"){ takeItem(command); }
+	else if (commandWord == "open"){ openDoor(command); }
+	else if (commandWord == "close"){ closeDoor(command); }
+	else if (commandWord == "lock"){ lockDoor(command); }
+	else if (commandWord == "unlock"){ unlockDoor(command); }
+	else if (commandWord == "attack"){ attackMonster(command); }
+	else if (commandWord == "search"){ searchRoom(command); }
 
 	return false;
 }
@@ -165,29 +345,9 @@ void Game::printWelcome() {
 	cout << endl << "Welcome to Zork!" << endl;
 	cout << "Zork is a new, incredible exciting advernture game" << endl;
 	cout << "Type 'help' if you need help." << endl << endl;
-	cout << _currentRoom->longDescription() << endl;
+	cout << _Player->currentRoom()->longDescription() << endl;
+	cout << "You are already equipped with an M4 rifle." << endl;
 }
 
 ostream& operator<<(ostream& os, const Game& game);
 
-int main(){
-	typedef Inventory<Character*> Cinventory;
-	Weapon M4("M4 Carbine", "Standard issue assault rifle");
-	Character Zombie("Zombie", "a flesh-eating monster");
-	Character hero("Thor", "legendary lightning hero from Asgard");
-
-	Cinventory cinv;
-
-	cout << M4 << endl;
-	cout << Zombie << endl;
-	cout << hero << endl;
-
-	hero.use(M4, Zombie);
-	hero.use(M4, Zombie);
-	hero.use(M4, Zombie);
-
-	cout << Zombie << endl;
-
-	Game* game = Game::getInstance();
-	game->play();
-}

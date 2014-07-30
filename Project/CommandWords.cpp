@@ -2,7 +2,6 @@
 CommandWords* CommandWords::__instance = NULL;
 
 CommandWords::CommandWords(): 
-//_validCommands{ "go", "quit", "help" }, 
 _length(sizeof(_validCommands) / sizeof(string)){
 
 	_validCommands[0] = "go";
@@ -13,6 +12,9 @@ _length(sizeof(_validCommands) / sizeof(string)){
 	_validCommands[5] = "close";
 	_validCommands[6] = "unlock";
 	_validCommands[7] = "lock";
+	_validCommands[8] = "attack";
+	_validCommands[9] = "search";
+
 }
 
 CommandWords::~CommandWords() { delete __instance; }

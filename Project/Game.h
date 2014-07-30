@@ -3,11 +3,13 @@
 
 #include <vector>
 #include <iostream>
+#include <string>
 using namespace std;
 
 #include "Parser.h"
 #include "Room.h"
 #include "Door.h"
+#include "Character.h"
 
 class Game{
 private:
@@ -20,11 +22,19 @@ public:
 	void play();
 	static Game* getInstance();
 
+
 private:
 	void createRooms();
 	void deleteRooms();
 
 	void goRoom(Command command);
+	void takeItem(Command command);
+	void openDoor(Command command);
+	void closeDoor(Command command);
+	void unlockDoor(Command command);
+	void lockDoor(Command command);
+	void attackMonster(Command command);
+	void searchRoom(Command command);
 	bool processCommand(Command command);
 
 	void printHelp();
@@ -34,10 +44,11 @@ private:
 
 private:
 	Parser _parser;
-	Room* _currentRoom;
-	Door* _ahead;
+//	Room* _currentRoom;
 	vector<Room*> _rooms;
 	static Game* __instance;
+	Inventory<Item*> _heroInventory;
+	Character* _Player = new Character("Player", "the only player");
 };
 
 #endif
